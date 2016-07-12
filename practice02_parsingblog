@@ -1,0 +1,30 @@
+rm(list=ls())
+library(XML)
+library(bitops)
+library(RCurl)
+library(httr)
+
+orgURL <- 'http://skygene.blogspot.tw/'
+
+startPage <- as.numeric(as.Date('1999/12/01',format='%Y/%m/%d'))
+endPage <- as.numeric(as.Date(cut(Sys.Date(),"month")))
+alldata <- data.frame()
+for(i in startPage:startPage+360)
+{
+  blogURL <- paste(orgURL, gsub("-","_",as.character(as.Date(i))),'_archive.html',sep='')
+  urlExists <- url.exists(blogURL)
+  
+  if(urlExists)
+  {
+    html <- getURL(blogURL, ssl.verifypeer = FALSE)
+    xml <- htmlParse(html, encoding ='utf-8')
+    title <- xpathSApply(xml, "//h3[@class='post-title entry-title']/a//text()", xmlValue)
+    author <- xpathSApply(xml, "//span[@class='fn']", xmlValue)
+    path <- xpathSApply(xml, "//h3[@class='post-title entry-title']/a//@href")
+    date <- xpathSApply(xml, "//h2[@class='date-header']/span", xmlValue)
+    response <- xpathSApply(xml, "//span[@id='u_0_2']", xmlValue)
+    tempdata <- data.frame(title, author, path, date, response)
+    
+    alldata <- rbind(alldata, tempdata)
+  }
+}
