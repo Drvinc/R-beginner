@@ -9,11 +9,12 @@ orgURL <- 'http://skygene.blogspot.tw/'
 startPage <- as.numeric(as.Date('1999/12/01',format='%Y/%m/%d'))
 endPage <- as.numeric(as.Date(cut(Sys.Date(),"month")))
 alldata <- data.frame()
-for(i in startPage:startPage+360)
+for(i in startPage:endPage)
 {
-  blogURL <- paste(orgURL, gsub("-","_",as.character(as.Date(i))),'_archive.html',sep='')
-  urlExists <- url.exists(blogURL)
-  
+  if(as.Date(cut(as.Date(i),"month"))>as.Date(cut(as.Date(i-1),"month")))
+  {
+    blogURL <- paste(orgURL, gsub("-","_",as.character(as.Date(i))),'_archive.html',sep='')
+    urlExists <- url.exists(blogURL)
   if(urlExists)
   {
     html <- getURL(blogURL, ssl.verifypeer = FALSE)
@@ -22,9 +23,11 @@ for(i in startPage:startPage+360)
     author <- xpathSApply(xml, "//span[@class='fn']", xmlValue)
     path <- xpathSApply(xml, "//h3[@class='post-title entry-title']/a//@href")
     date <- xpathSApply(xml, "//h2[@class='date-header']/span", xmlValue)
-    response <- xpathSApply(xml, "//span[@id='u_0_2']", xmlValue)
-    tempdata <- data.frame(title, author, path, date, response)
+    #response <- xpathSApply(xml, "//span[@id='u_0_2']", xmlValue)
+    tempdata <- data.frame(title, author, path, date)
     
     alldata <- rbind(alldata, tempdata)
   }
+  }
 }
+
