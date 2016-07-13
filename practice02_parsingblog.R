@@ -7,7 +7,7 @@ library(httr)
 orgURL <- 'http://skygene.blogspot.tw/'
 
 startPage <- as.numeric(as.Date('2005/12/01',format='%Y/%m/%d'))
-endPage <- as.numeric(as.Date('2010/12/01',format='%Y/%m/%d'))
+endPage <- as.numeric(as.Date('2006/12/01',format='%Y/%m/%d'))
 #endPage <- as.numeric(as.Date(cut(Sys.Date(),"month")))
 alldata <- data.frame()
 for(i in startPage:endPage)
@@ -31,7 +31,8 @@ for(i in startPage:endPage)
       xml <- htmlParse(html, encoding ='utf-8')
       date <- xpathSApply(xml, "//h2[@class='date-header']/span", xmlValue)
       #response <- xpathSApply(xml, "//span[@id='u_0_2']", xmlValue)
-      tempdata <- data.frame(title, author, path, date, date.month)
+      response <- ifelse(length(xpathSApply(xml, "//span[@id='u_0_2']", xmlValue))==0,as.character("0"),xpathSApply(xml, "//span[@id='u_0_2']", xmlValue))
+      tempdata <- data.frame(title, author, path, date, date.month, response)
       
       alldata <- rbind(alldata, tempdata)
       }
