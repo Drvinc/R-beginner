@@ -6,8 +6,9 @@ library(httr)
 
 orgURL <- 'http://skygene.blogspot.tw/'
 
-startPage <- as.numeric(as.Date('2013/12/01',format='%Y/%m/%d'))
-endPage <- as.numeric(as.Date(cut(Sys.Date(),"month")))
+startPage <- as.numeric(as.Date('2005/12/01',format='%Y/%m/%d'))
+endPage <- as.numeric(as.Date('2010/12/01',format='%Y/%m/%d'))
+#endPage <- as.numeric(as.Date(cut(Sys.Date(),"month")))
 alldata <- data.frame()
 for(i in startPage:endPage)
 {
@@ -19,6 +20,8 @@ for(i in startPage:endPage)
     {
       html <- getURL(blogURL, ssl.verifypeer = FALSE)
       xml <- htmlParse(html, encoding ='utf-8')
+      if(length(xpathSApply(xml, "//h3[@class='post-title entry-title']/a//text()", xmlValue))!=0)
+      {
       title <- xpathSApply(xml, "//h3[@class='post-title entry-title']/a//text()", xmlValue)
       author <- xpathSApply(xml, "//span[@class='fn']", xmlValue)
       path <- xpathSApply(xml, "//h3[@class='post-title entry-title']/a//@href")
@@ -31,6 +34,7 @@ for(i in startPage:endPage)
       tempdata <- data.frame(title, author, path, date, date.month)
       
       alldata <- rbind(alldata, tempdata)
+      }
     }
   }
 }
