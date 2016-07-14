@@ -3,5 +3,8 @@
 Data.Taipei <br />
 => http://data.taipei/ <br />
 
+kaggle <br />
+=> https://www.kaggle.com/datasets <br />
+
 Artificial large EMR data-sets <br />
 => http://www.emrbots.org/
