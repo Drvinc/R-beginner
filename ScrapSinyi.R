@@ -53,4 +53,4 @@ names(allData)[8] <- "屋齡"
 names(allData)[9] <- "樓層"
 names(allData)[10] <- "格局"
 
-#write.csv(allData, "Sinyi10007_10507.csv")
+write.csv(allData, "Sinyi10506_10507.csv")
