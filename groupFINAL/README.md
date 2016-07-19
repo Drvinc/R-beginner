@@ -8,6 +8,7 @@ Clean up data
 * result: SinyiClean.csv
 
 Graph and calc
+* Plot.R
 * IncomeCorre.R
 * aIncome.csv
 
