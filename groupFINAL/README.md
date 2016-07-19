@@ -1,2 +1,16 @@
-File description <br/>
-parseSinyi.R => Sinyi Crawler <br/>
+# File description <br/>
+Crawler 
+* parseSinyi.R 
+* result: Sinyi10301_10507.csv
+
+Clean up data 
+* SinyiClean.R 
+* result: SinyiClean.csv
+
+Graph and calc
+* IncomeCorre.R
+* aIncome.csv
+
+Shiny apps
+* server.R
+* ui.R 
