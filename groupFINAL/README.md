@@ -15,3 +15,6 @@ Graph and calc
 Shiny apps
 * server.R
 * ui.R 
+
+### Presentation
+=> https://berlin.shinyapps.io/groupFINAL/
