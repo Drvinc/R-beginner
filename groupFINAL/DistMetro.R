@@ -2,9 +2,9 @@ rm(list=ls())
 
 library("geosphere")
 
-Addre124 <- read.csv("Address124.csv")
+AddreXY <- read.csv("AddressXY.csv")
 # delete empty rows
-Addre <- Addre124[!(Addre124$Response_X == ''),] 
+Addre <- AddreXY[!(AddreXY$Response_X == ''),] 
 # delete columns
 Addre <- Addre[,-(2:3)]
 # clean up x,y
@@ -32,6 +32,7 @@ for (i in 1:nrow(Addre)){
 AllData <- read.csv("SinyiClean.csv")
 colnames(AllData)[1] <- "Id"
 FINAL <- merge(AllData,Addre,by="Id")
+# write.csv(FINAL, "SinyiDist.csv")
 
 # Stats
 target = FINAL[FINAL$distMRT<4000,]
