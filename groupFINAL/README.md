@@ -8,9 +8,10 @@ Clean up data
 * result: SinyiClean.csv
 
 Graph and calc
-* Plot.R
+* Plot.R (descriptive stats)
 * IncomeCorre.R
 * aIncome.csv
+* result: MetPrToIncome.PNG
 
 Shiny apps
 * server.R
