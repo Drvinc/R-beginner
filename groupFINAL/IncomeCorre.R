@@ -16,8 +16,9 @@ for (i in 1:nrow(meanPrice)){
 aIncome <- read.csv("aIncome.csv")
 FINAL <- merge(aIncome, meanPrice, by="Area")
 
-col_title <- c("行政區","年","所得收入總計","非消費支出","消費支出","可支配所得","最終消費支出","儲蓄","所得總額","平均每坪價格")
+#write.csv(FINAL,"SinyiDist.csv")
 
+col_title <- c("行政區","年","所得收入總計","非消費支出","消費支出","可支配所得","最終消費支出","儲蓄","所得總額","平均每坪價格")
 
 # OVERALL plot complicated
   # Correlation panel
