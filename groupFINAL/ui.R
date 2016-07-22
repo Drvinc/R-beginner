@@ -4,11 +4,18 @@ shinyUI(navbarPage("台北市房價分析",
                    tabPanel("房價地圖",
                             sidebarLayout(
                               sidebarPanel(
-                                actionLink("select_none","清空"),
                                 checkboxGroupInput("Area", 
                                                    label = h2("行政區"), 
                                                    choices = list("1.松山區"=1,"2.信義區"=2,"3.大安區"=3,"4.中山區"=4,"5.中正區"=5,"6.大同區"=6,"7.萬華區"=7,"8.文山區"=8,"9.南港區"=9,"10.內湖區"=10,"11.士林區"=11,"12.北投區"=12),
-                                                   selected = c(3,7))
+                                                   selected = c(3,7)),
+                                actionButton("checkAll", label = "全選"),
+                                actionButton("checkNone", label = "清空"),
+                                checkboxGroupInput("PrLevel", 
+                                                   label = h2("價位(每坪)"), 
+                                                   choices = list("20萬以下"=1,"20萬~40萬"=2,"40萬~80萬"=3,"80萬~120萬"=4,"120萬以上"=5),
+                                                   selected = c(1,5)),
+                                actionButton("checkAll1", label = "全選"),
+                                actionButton("checkNone1", label = "清空")
                               ),
                               mainPanel(
                                 plotOutput("TPEitems", height="900px"),
@@ -59,9 +66,20 @@ shinyUI(navbarPage("台北市房價分析",
                               )
                             )
                    ),
-                   tabPanel("關於"
-                            
-                            
+                   tabPanel("關於",
+                            "台大系統資訊班課程作品: 使用R語言進行資料分析【270期】(暑期密集班) Jul. 11-22, 2016",br(),
+                            a("https://www.csie.ntu.edu.tw/train/?page=course_info.html&courseid=1505",href="https://www.csie.ntu.edu.tw/train/?page=course_info.html&courseid=1505",target="_blank"),
+                            h3("Project 原始碼:"),
+                            a("https://github.com/Drvinc/R-beginner/tree/master/groupFINAL",href="https://github.com/Drvinc/R-beginner/tree/master/groupFINAL",target="_blank"),
+                            h3("資料來源:"),
+                            "1. 信義房屋成交行情",br(),
+                            a("http://tradeinfo.sinyi.com.tw",href="http://tradeinfo.sinyi.com.tw",target="_blank"),br(),
+                            "2. Data.Taipei -- 家庭收支訪問調查",br(),
+                            a("http://data.taipei/opendata/datalist/datasetMeta?oid=52e5fce0-c7a3-49a9-a37b-f7d3e014f525",href="http://data.taipei/opendata/datalist/datasetMeta?oid=52e5fce0-c7a3-49a9-a37b-f7d3e014f525",target="_blank"),br(),
+                            "3. 地址轉座標: 地理資訊圖資雲服務平台",br(),
+                            a("http://tgos.nat.gov.tw/tgos/Web/Address/TGOS_Address.aspx",href="http://tgos.nat.gov.tw/tgos/Web/Address/TGOS_Address.aspx",target="_blank"),br(),
+                            "4. 台北捷運站點座標:",br(),
+                            a("https://github.com/repeat/taipei-metro-stations",href="https://github.com/repeat/taipei-metro-stations",target="_blank")
                    ) 
                    
 ))
