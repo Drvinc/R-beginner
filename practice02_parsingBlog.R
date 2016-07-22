@@ -40,6 +40,7 @@ for(i in startPage:endPage)
   }
 }
 
+# histogram -- count by month
 allDate <- levels(alldata$date.month)
 
 res = hist(as.numeric(alldata$date.month), nclass=length(allDate), axes=F, labels=T) 
