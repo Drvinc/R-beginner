@@ -48,17 +48,17 @@ shinyServer(function(input, output, session) {
     tarr <- subset(target, Area %in% A_select)
     df = subset(tarr, select=c("Area","MetPr"))
     bymedian <- with(df, reorder(Area, MetPr, median)) #sort by median
-    A_select <- as.vector(levels(bymedian))
-    A_names <- vector(mode="character",length=length(A_select))
-    for (i in 1:length(A_select))
-    {A_names[i] <- as.character(AreaList[as.numeric(A_select[i])])}
-    box <- ggplot(data = df,aes(x=bymedian , y=MetPr,fill = bymedian)) + coord_cartesian(ylim = c(10, 200))
-    box <- box + geom_boxplot(outlier.size = 1,outlier.colour = "gray",position = "dodge",colour = "#666666",width = 0.5)
+    df$AreabyMedian <- as.factor(bymedian)
+    df$Area <- as.factor(df$Area)
+    box <- ggplot(data = df,aes(x=AreabyMedian, y=MetPr, group=Area, fill=Area)) + coord_cartesian(ylim = c(10, 200)) + theme(legend.position="none")
+    box <- box + geom_boxplot(outlier.size = 2,outlier.colour = "gray",position = "dodge",colour = "#666666",width = 0.6)
     box <- box + labs(x = "Area", y = "Per Ping price (10K)", title = "Price Comparison by Area")
+    box <- box + scale_x_discrete(labels=AreaList[as.numeric(levels(bymedian))]) + theme(axis.text.x = element_text(face="bold",size=13, angle=ifelse(length(A_select)>7,45,0),hjust=ifelse(length(A_select)>7,1,0.5)))
     box
   })
   output$AvgCompare <- renderPlot({
     A_select <- as.vector(input$Area)
+    
     meanPrice <- data.frame("Area"=c(1:13),"MeanMetPr"=0)
     for (i in 1:12){
       tarr <- target[(target$Area == i),]
@@ -67,16 +67,19 @@ shinyServer(function(input, output, session) {
     meanPrice$MeanMetPr[13]=mean(target$MetPr,na.rm=TRUE)
     
     x = A_select
-    df <- meanPrice[meanPrice$Area %in% c(x,13),]
-    A_names <- vector(mode="character",length=length(A_select))
-    for (i in 1:length(A_select))
-    {A_names[i] <- as.character(AreaList[as.numeric(A_select[i])])}
-    A_names <- c(A_names, "TPE") 
+    df <- meanPrice[meanPrice$Area %in% x,]
+    bymean <- with(df, reorder(Area, MeanMetPr))
+    df$AreabyMean <- as.factor(bymean)
+    df$Area <- as.factor(df$Area)
     #barplot(height=df$MeanMetPr, horiz=TRUE, names.arg = A_names)
-    df$Area = factor(df$Area,levels = c(1,2,3,4,5,6,7,8,9,10,11,12,13))
-    c <- ggplot(df, aes(x = df$Area , y = df$MeanMetPr,fill = Area))
+    c <- ggplot(df, aes(x = df$AreabyMean , y = df$MeanMetPr, fill = Area))
+    h <- meanPrice$MeanMetPr[13]
+    c <- c + theme(legend.position="none")
     c <- c + geom_bar(stat="identity",width = 0.5)
-    c <- c +labs(x = "Area", y = "Avg per Ping price (10K)")
+    c <- c + geom_hline(yintercept = h, linetype="dashed", color = "blue", size=1)
+    c <- c + geom_text(aes(0, h,label = paste0("Taipei City's mean: ", round(h,2)),x=0.5,y=h+4,hjust=0,vjust=0,size=14))
+    c <- c + labs(x = "Area", y = "Avg per Ping price (10K)")
+    c <- c + scale_x_discrete(labels=AreaList[as.numeric(levels(bymean))]) + theme(axis.text.x = element_text(face="bold",size=13, angle=ifelse(length(x)>7,45,0),hjust=ifelse(length(x)>7,1,0.5)))
     c 
   })
   
@@ -91,11 +94,12 @@ shinyServer(function(input, output, session) {
     Y2 <- as.numeric(input$Year[2])
     SeN <- ((Y2-Y1)/0.25)+1
     YSe <- vector(mode="character",length = SeN+1)
-    int1 <- as.integer(Y1)
-    dec1 <- Y1-as.integer(Y1)
+    int1 <- trunc(Y1)
+    dec1 <- Y1-int1
     for (i in 1:SeN){
-      YSe[i] <- paste(int1+as.integer(dec1+(i-1)*0.25),(dec1+(i-1)*0.25-as.integer(dec1+(i-1)*0.25))/0.25+1,sep="")
+      YSe[i] <- paste(int1+trunc(dec1+(i-1)*0.25),(dec1+(i-1)*0.25-trunc(dec1+(i-1)*0.25))/0.25+1,sep="")
     }
+    tarr1 = subset(tarr1, YyySe %in% YSe)
     
     df = subset(tarr1, YyySe %in% YSe)
     bins <- input$bins
@@ -110,10 +114,10 @@ shinyServer(function(input, output, session) {
     Y2 <- as.numeric(input$Year[2])
     SeN <- ((Y2-Y1)/0.25)+1
     YSe <- vector(mode="character",length = SeN+1)
-    int1 <- as.integer(Y1)
-    dec1 <- Y1-as.integer(Y1)
+    int1 <- trunc(Y1)
+    dec1 <- Y1-int1
     for (i in 1:SeN){
-      YSe[i] <- paste(int1+as.integer(dec1+(i-1)*0.25),(dec1+(i-1)*0.25-as.integer(dec1+(i-1)*0.25))/0.25+1,sep="")
+      YSe[i] <- paste(int1+trunc(dec1+(i-1)*0.25),(dec1+(i-1)*0.25-trunc(dec1+(i-1)*0.25))/0.25+1,sep="")
     }
     tarr2 = subset(tarr2, YyySe %in% YSe)
     
